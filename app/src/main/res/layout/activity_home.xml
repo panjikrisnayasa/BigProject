@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomeActivity">
+
+    <ImageView
+        android:id="@+id/iv_home_greetings_background"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:foreground="@color/colorImageDarkOpacity"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/image_morning" />
+
+    <TextView
+        android:id="@+id/tv_home_welcome"
+        style="@style/TextStyle.H0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/key_line_margin"
+        android:textColor="@android:color/white"
+        tools:text="@string/home_tv_welcome" />
+
+    <Button
+        android:id="@+id/btn_home_logout"
+        style="@style/ButtonStyle.Rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/home_btn_logout" />
+
+</RelativeLayout>

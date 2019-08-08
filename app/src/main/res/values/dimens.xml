@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="key_line_margin">16dp</dimen>
+    <dimen name="key_line_margin_content_start">72dp</dimen>
+    <dimen name="content_margin">8dp</dimen>
+</resources>
