@@ -2,6 +2,7 @@ package com.panjikrisnayasa.bigproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -45,15 +46,20 @@ class HomeActivity : AppCompatActivity(), View.OnClickListener, ValueEventListen
         val user = p0.getValue(User::class.java)
         if (user != null) {
             val currentTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-            if (currentTime >= 12) {
-                iv_home_greetings_background.setImageResource(R.drawable.image_afternoon)
-                tv_home_welcome.text = getString(R.string.home_tv_welcome, "Afternoon", user.fullName)
-            } else if (currentTime >= 19) {
-                iv_home_greetings_background.setImageResource(R.drawable.image_night)
-                tv_home_welcome.text = getString(R.string.home_tv_welcome, "Night", user.fullName)
-            } else if (currentTime >= 0) {
-                iv_home_greetings_background.setImageResource(R.drawable.image_morning)
-                tv_home_welcome.text = getString(R.string.home_tv_welcome, "Morning", user.fullName)
+            Log.d("Panji", currentTime.toString())
+            when {
+                currentTime in 12..16 -> {
+                    iv_home_greetings_background.setImageResource(R.drawable.image_afternoon)
+                    tv_home_welcome.text = getString(R.string.home_tv_welcome, "Afternoon", user.fullName)
+                }
+                currentTime in 17..24 || currentTime in 0..4 -> {
+                    iv_home_greetings_background.setImageResource(R.drawable.image_night)
+                    tv_home_welcome.text = getString(R.string.home_tv_welcome, "Night", user.fullName)
+                }
+                currentTime in 5..11 -> {
+                    iv_home_greetings_background.setImageResource(R.drawable.image_morning)
+                    tv_home_welcome.text = getString(R.string.home_tv_welcome, "Morning", user.fullName)
+                }
             }
         }
     }
