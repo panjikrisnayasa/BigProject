@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,28 +9,31 @@
     tools:context=".LoginActivity">
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tiet_login_email"
+            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:autofillHints="email"
             android:hint="@string/login_tiet_email"
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_login_password"
+        style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/content_margin">
+        android:layout_marginTop="@dimen/content_margin"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tiet_login_password"
+            style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:hint="@string/login_tiet_password"
             android:inputType="textPassword" />
 

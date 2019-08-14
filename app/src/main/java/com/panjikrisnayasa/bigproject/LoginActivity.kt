@@ -3,6 +3,8 @@ package com.panjikrisnayasa.bigproject
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -11,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.regex.Pattern
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity(), View.OnClickListener, TextWatcher {
 
     companion object {
         const val RC_SIGN_UP = 1
@@ -23,10 +25,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        supportActionBar?.title = "Login to Appski"
+        supportActionBar?.title = "Login to Appskie"
 
         tv_login_sign_up_here.setOnClickListener(this)
         btn_login_login.setOnClickListener(this)
+        tiet_login_password.addTextChangedListener(this)
 
         mAuth = FirebaseAuth.getInstance()
     }
@@ -87,18 +90,34 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 if (!password.isNotBlank()) {
                     isNull = true
+                    til_login_password.isPasswordVisibilityToggleEnabled = false
                     tiet_login_password.error = getString(R.string.login_error_null)
                 }
 
                 if (!isNull && !isEmailInvalid) {
                     mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
+                            val cUser = mAuth.currentUser
                             if (it.isSuccessful) {
-                                val homeIntent = Intent(this, HomeActivity::class.java)
-                                startActivity(homeIntent)
-                                finish()
+                                if (!cUser?.isEmailVerified!!) {
+                                    Toast.makeText(
+                                        this,
+                                        "You need to verify your email address",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    mAuth.signOut()
+                                } else {
+                                    val homeIntent = Intent(this, HomeActivity::class.java)
+                                    startActivity(homeIntent)
+                                    finish()
+                                }
                             } else {
-                                Toast.makeText(this, "Login failed. Email or password incorrect", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    this,
+                                    "Email or password incorrect",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             }
                         }
@@ -106,4 +125,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
+    override fun afterTextChanged(s: Editable?) {}
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        til_login_password.isPasswordVisibilityToggleEnabled = true
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 }

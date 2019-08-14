@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Appski</string>
+    <string name="app_name">Appskie</string>
     <string name="login_tiet_email">Email</string>
     <string name="login_tiet_password">Password</string>
     <string name="login_tv_forgot_your_password">Forgot your password?</string>
@@ -10,7 +10,7 @@
     <string name="sign_up_tiet_password">Password</string>
     <string name="sign_up_btn_sign_up">Sign up</string>
     <string name="sign_up_tv_login_here">Already have an account? <b>Login here</b></string>
-    <string name="home_tv_welcome">Good %s, %s!</string>
+    <string name="home_tv_welcome">Good %s,\n%s!</string>
     <string name="home_btn_logout">Logout</string>
     <string name="sign_up_error_null">Fill this field</string>
     <string name="sign_up_error_password_unsafe">Password must be at least 6 characters length</string>

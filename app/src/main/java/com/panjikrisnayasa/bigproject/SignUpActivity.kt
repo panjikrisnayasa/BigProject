@@ -3,6 +3,8 @@ package com.panjikrisnayasa.bigproject
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.util.regex.Pattern
 
 
-class SignUpActivity : AppCompatActivity(), View.OnClickListener {
+class SignUpActivity : AppCompatActivity(), View.OnClickListener, TextWatcher {
 
     companion object {
         const val EXTRA_EMAIL = "extra_email"
@@ -26,11 +28,12 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        supportActionBar?.title = "Sign Up to Appski"
+        supportActionBar?.title = "Sign Up to Appskie"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         tv_sign_up_login_here.setOnClickListener(this)
         btn_sign_up_sign_up.setOnClickListener(this)
+        tiet_sign_up_password.addTextChangedListener(this)
 
         mAuth = FirebaseAuth.getInstance()
         mUserDatabaseReference = FirebaseDatabase.getInstance().getReference("users")
@@ -61,6 +64,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                     isNull = true
                     tiet_sign_up_full_name.error = getString(R.string.sign_up_error_null)
                 }
+
                 if (!email.isNotBlank()) {
                     isNull = true
                     tiet_sign_up_email.error = getString(R.string.sign_up_error_null)
@@ -68,11 +72,14 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                     isEmailInvalid = true
                     tiet_sign_up_email.error = getString(R.string.sign_up_error_email_invalid)
                 }
+
                 if (!password.isNotBlank()) {
                     isNull = true
+                    til_sign_up_password.isPasswordVisibilityToggleEnabled = false
                     tiet_sign_up_password.error = getString(R.string.sign_up_error_null)
                 } else if (password.length < 6) {
                     isPasswordUnsafe = true
+                    til_sign_up_password.isPasswordVisibilityToggleEnabled = false
                     tiet_sign_up_password.error = getString(R.string.sign_up_error_password_unsafe)
                 }
 
@@ -84,18 +91,43 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener {
                                 if (cUser != null) {
                                     val user = User(cUser.uid, fullName, email)
                                     mUserDatabaseReference.child(cUser.uid).setValue(user)
-                                    Toast.makeText(this, "Sign up success", Toast.LENGTH_SHORT).show()
+
+                                    cUser.sendEmailVerification().addOnCompleteListener { that ->
+                                        if (that.isSuccessful) {
+                                            Toast.makeText(
+                                                this,
+                                                "Verification email sent",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+
+                                            mAuth.signOut()
+                                            val loginIntent = Intent(this, LoginActivity::class.java)
+                                            loginIntent.putExtra(EXTRA_EMAIL, email)
+                                            setResult(Activity.RESULT_OK, loginIntent)
+                                            finish()
+                                        } else {
+                                            Toast.makeText(
+                                                this,
+                                                "Failed to send verification email",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
                                 }
                             } else {
                                 Toast.makeText(this, "Sign up failed, please try again", Toast.LENGTH_SHORT).show()
                             }
                         }
-                    val loginIntent = Intent(this, LoginActivity::class.java)
-                    loginIntent.putExtra(EXTRA_EMAIL, email)
-                    setResult(Activity.RESULT_OK, loginIntent)
-                    finish()
                 }
             }
         }
     }
+
+    override fun afterTextChanged(s: Editable?) {}
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        til_sign_up_password.isPasswordVisibilityToggleEnabled = true
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 }
