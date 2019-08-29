@@ -1,6 +1,6 @@
 # LoginLogoutWithFirebase
 
-Simple login logout app with firebase
+A simple login logout app with firebase
 
 ![device-2019-08-29-113644](https://user-images.githubusercontent.com/48062932/63910575-8429bb80-ca51-11e9-9efe-6f3ad0e744e4.png)
 
